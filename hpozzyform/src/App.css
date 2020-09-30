@@ -57,6 +57,8 @@ input {
   background: transparent;
   border: 1px solid white;
   color: white;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 
 button {
@@ -72,6 +74,13 @@ button {
   border: 1px solid white;
 }
 
-.text-red {
-  border: 1px solid red;
+.textRed {
+  color: red;
+}
+
+.borderRed {
+  border: solid 1px red;
+}
+label {
+  color: white;
 }
