@@ -3,6 +3,7 @@ import validator from "validator"
 import "./App.css"
 
 function Form() {
+  let filled = 0
   const [emailText, setEmailText] = useState("")
   const [passwordText, setPasswordText] = useState("")
   const [emailValid, setEmailValid] = useState(true)
@@ -21,6 +22,9 @@ function Form() {
   const [passwordLabel, setPasswordLabel] = useState("Password")
   const [websiteLabel, setWebsiteLabel] = useState("Website")
 
+  const [profile, setProfile] = useState("Profile Form - All fields required")
+  const [errors, setErrors] = useState(true)
+
   function handleSubmit(e) {
     e.preventDefault()
 
@@ -31,6 +35,8 @@ function Form() {
       setNameValid(true)
       setNameLabel("Name")
       setNameText(nameText)
+      filled += 1
+      isFilled()
     }
 
     if (!validator.isEmail(emailText)) {
@@ -41,6 +47,8 @@ function Form() {
       setEmailValid(true)
       setEmailLabel("Email")
       setEmailText(emailText)
+      filled += 1
+      isFilled()
     }
     if (validator.isEmpty(usernameText)) {
       setUsernameLabel("Username is required")
@@ -49,16 +57,20 @@ function Form() {
       setUserNameValid(true)
       setUsernameLabel("userName")
       setUserNameText(usernameText)
+      filled += 1
+      isFilled()
     }
     if (validator.isEmpty(passwordText)) {
       setPasswordLabel("Password is required")
       setPasswordValid(false)
     } else {
       setPasswordValid(true)
-      setPasswordLabel("userName")
+      setPasswordLabel("Password ")
       setPasswordText(passwordText)
+      filled += 1
+      isFilled()
     }
-    if (!validator.isEmail(websiteText)) {
+    if (!validator.isURL(websiteText)) {
       setWebsiteLabel("Website is required")
       setWebsiteValid(false)
       setWebsiteText("")
@@ -66,14 +78,22 @@ function Form() {
       setWebsiteValid(true)
       setWebsiteLabel("url")
       setWebsiteText(websiteText)
+      filled += 1
+      isFilled()
+    }
+    function isFilled() {
+      if (filled === 5) {
+        setErrors(false)
+        setProfile("Thank you, Your Profile Has been Updated")
+      }
     }
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Profile Form - All Fields Required</h2>
+      <h2>{profile}</h2>
 
-      <div className="groupOfInputs">
+      <div className={errors ? "" : "displayNone"}>
         <label htmlFor="name" className={nameValid ? "" : "textRed"}>
           {nameLabel}
         </label>
@@ -92,7 +112,7 @@ function Form() {
         </label>
         <br></br>
         <input
-          placeholder="emailLabel"
+          placeholder={emailLabel}
           id="email"
           type="email"
           value={emailText}
@@ -127,7 +147,7 @@ function Form() {
         />
         <br></br>
         <label htmlFor="password" className={passwordValid ? "" : "textRed"}>
-          {passwordLabel}
+          Confirm {passwordLabel}
         </label>
         <br></br>
         <input
@@ -149,11 +169,15 @@ function Form() {
           type="website"
           value={websiteText}
           className={websiteValid ? "" : "borderRed"}
-          onChange={(e) => setWebsiteValid(e.target.value)}
+          onChange={(e) => setWebsiteText(e.target.value)}
         />
         <br></br>
 
-        <button>Submit</button>
+        <div id="button" className={errors ? "" : "displayNone"}>
+          <button type="submit" onClick={handleSubmit}>
+            Submit
+          </button>
+        </div>
       </div>
     </form>
   )
