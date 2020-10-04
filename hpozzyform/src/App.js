@@ -22,6 +22,12 @@ function Form() {
   const [passwordLabel, setPasswordLabel] = useState("Password")
   const [websiteLabel, setWebsiteLabel] = useState("Website")
 
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [confirmPasswordValid, setConfirmPasswordValid] = useState(true)
+  const [confirmPasswordLabel, setConfirmPasswordLabel] = useState(
+    "Confirm Password"
+  )
+
   const [profile, setProfile] = useState("Profile Form - All fields required")
   const [errors, setErrors] = useState(true)
 
@@ -70,6 +76,16 @@ function Form() {
       filled += 1
       isFilled()
     }
+    if (validator.isEmpty(confirmPassword)) {
+      setConfirmPasswordLabel("Confirm Password - Cannot be blank")
+      setConfirmPasswordValid(false)
+    } else {
+      setConfirmPassword(confirmPassword)
+      setConfirmPasswordValid(true)
+      setConfirmPasswordLabel("Confirm Password")
+      filled += 1
+      isFilled()
+    }
     if (!validator.isURL(websiteText)) {
       setWebsiteLabel("Website is required")
       setWebsiteValid(false)
@@ -84,8 +100,12 @@ function Form() {
     function isFilled() {
       if (filled === 5) {
         setErrors(false)
-        setProfile("Thank you, Your Profile Has been Updated")
+        setProfile("Thank you. Your Profile Has been Updated")
       }
+    }
+    if (confirmPassword !== passwordText) {
+      setConfirmPasswordValid(false)
+      setConfirmPasswordLabel("Confirm Password - Must match password")
     }
   }
 
@@ -146,7 +166,25 @@ function Form() {
           onChange={(e) => setPasswordText(e.target.value)}
         />
         <br></br>
-        <label htmlFor="password" className={passwordValid ? "" : "textRed"}>
+
+        <label
+          htmlFor="confirmPassword"
+          className={confirmPasswordValid ? "" : "textRed"}
+        >
+          {confirmPasswordLabel}
+        </label>
+        <br></br>
+        <input
+          id="confirmPassword"
+          type="password"
+          placeholder={confirmPasswordLabel}
+          value={confirmPassword}
+          className={confirmPasswordValid ? "" : "borderRed"}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+        <br></br>
+
+        {/* <label htmlFor="password" className={passwordValid ? "" : "textRed"}>
           Confirm {passwordLabel}
         </label>
         <br></br>
@@ -157,7 +195,7 @@ function Form() {
           value={passwordText}
           className={passwordValid ? "" : "borderRed"}
           onChange={(e) => setPasswordText(e.target.value)}
-        />
+        /> */}
         <br></br>
         <label htmlFor="website" className={websiteValid ? "" : "textRed"}>
           {websiteLabel}
